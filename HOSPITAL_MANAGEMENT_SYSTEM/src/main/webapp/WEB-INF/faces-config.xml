@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+                                  http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
+	version="2.0">
+ 
+	<managed-bean>
+		<managed-bean-name>doctor</managed-bean-name>
+		<managed-bean-class>com.java.jsf.model.Doctor</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	
+	
+	<managed-bean>
+		<managed-bean-name>medicationHistory</managed-bean-name>
+		<managed-bean-class>com.java.jsf.model.MedicationHistory</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>medicationHistoryDao</managed-bean-name>
+		<managed-bean-class>com.java.jsf.dao.MedicationHistoryDaoImpl</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	
+	<managed-bean>
+		<managed-bean-name>doctorDao</managed-bean-name>
+		<managed-bean-class>com.java.jsf.dao.DoctorDaoImpl</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>doctorController</managed-bean-name>
+		<managed-bean-class>com.java.jsf.controller.DoctorController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	
+ 
+	<managed-bean>
+		<managed-bean-name>doctorController</managed-bean-name>
+		<managed-bean-class>com.java.jsf.controller.DoctorController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+ 
+		<managed-property>
+			<property-name>doctordao</property-name>
+			<property-class>com.java.jsf.dao.DoctorDaoImpl</property-class>
+			<value>#{doctorDao}</value>
+		</managed-property>
+		
+		<managed-property>
+			<property-name>doctor</property-name>
+			<property-class>com.java.jsf.model.Doctor</property-class>
+			<value>#{doctor}</value>
+		</managed-property>
+	</managed-bean>
+	
+	
+	<managed-bean>
+		<managed-bean-name>patient</managed-bean-name>
+		<managed-bean-class>com.java.jsf.model.Patient</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	
+	<managed-bean>
+		<managed-bean-name>patientDao</managed-bean-name>
+		<managed-bean-class>com.java.jsf.dao.PatientDaoImpl</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	
+	<managed-bean>
+	
+		<managed-bean-name>patientController</managed-bean-name>
+		<managed-bean-class>com.java.jsf.controller.PatientController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+ 
+		<managed-property>
+			<property-name>patientdao</property-name>
+			<property-class>com.java.jsf.dao.PatientDaoImpl</property-class>
+			<value>#{patientDao}</value>
+		</managed-property>
+		
+		<managed-property>
+			<property-name>doctor</property-name>
+			<property-class>com.java.jsf.model.Doctor</property-class>
+			<value>#{doctor}</value>
+		</managed-property>
+		
+		<managed-property>
+			<property-name>patient</property-name>
+			<property-class>com.java.jsf.model.Patient</property-class>
+			<value>#{patient}</value>
+		</managed-property>
+		
+	</managed-bean>
+	
+	
+	
+	
+	<managed-bean>
+	
+		<managed-bean-name>medicationHistoryController</managed-bean-name>
+		<managed-bean-class>com.java.jsf.controller.MedicationHistoryController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+ 
+		<managed-property>
+			<property-name>medicationHistoryDao</property-name>
+			<property-class>com.java.jsf.dao.MedicationHistoryDaoImpl</property-class>
+			<value>#{medicationHistoryDao}</value>
+		</managed-property>
+		
+		<managed-property>
+			<property-name>medicationHistory</property-name>
+			<property-class>com.java.jsf.model.MedicationHistory</property-class>
+			<value>#{medicationHistory}</value>
+		</managed-property>
+		
+		
+		
+		<managed-property>
+			<property-name>doctor</property-name>
+			<property-class>com.java.jsf.model.Doctor</property-class>
+			<value>#{doctor}</value>
+		</managed-property>
+		
+		<managed-property>
+			<property-name>patient</property-name>
+			<property-class>com.java.jsf.model.Patient</property-class>
+			<value>#{patient}</value>
+		</managed-property>
+		
+	</managed-bean>
+ 
+ 
+</faces-config>

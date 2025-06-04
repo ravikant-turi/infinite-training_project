@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 14-Sep-2023, 3:38:07 pm by Hibernate Tools 3.5.0.Final -->
+<hibernate-mapping>
+	<class name="com.java.jsf.model.Doctor" table="Doctor">
+		<id name="doctorId" type="java.lang.String">
+			<column name="doctorId" />
+
+		</id>
+		<property name="location" type="java.lang.String">
+			<column name="location" />
+		</property>
+		
+		<property name="doctorName" type="java.lang.String">
+			<column name="doctorName" />
+		</property>
+
+		<property name="mobileNo" type="java.lang.String">
+			<column name="mobileNo" />
+		</property>
+
+
+		<property name="specialization">
+			<column name="specialization" />
+			<type name="org.hibernate.type.EnumType">
+				<param name="enumClass">com.java.jsf.model.Specialization</param>
+				<param name="type">12</param>
+			</type>
+		</property>
+
+
+		<property name="isStatus">
+			<column name="isStatus" />
+			<type name="org.hibernate.type.EnumType">
+				<param name="enumClass">com.java.jsf.model.Status</param>
+				<param name="type">12</param>
+			</type>
+		</property>
+
+
+	</class>
+
+	<query name="showDoctors">
+		from Doctor
+	</query>
+</hibernate-mapping>
+
