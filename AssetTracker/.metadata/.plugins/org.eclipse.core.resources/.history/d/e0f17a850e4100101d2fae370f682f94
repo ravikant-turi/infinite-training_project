@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee /WEB-INF/schema/web-facesconfig_2_0.xsd"
+	version="2.0" metadata-complete="false">
+	<!-- This file must be present with our jar, even if it is empty. Otherwise, 
+		our Java annotations won't get scanned! -->
+
+<!-- Asset Bean -->
+
+<managed-bean>
+    <managed-bean-name>asset</managed-bean-name>
+    <managed-bean-class>com.java.model.Asset</managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+</managed-bean>
+
+<!-- AssetDaoImpl Bean -->
+<managed-bean>
+    <managed-bean-name>assetDao</managed-bean-name>
+    <managed-bean-class>com.java.daoImpl.AssetDaoImpl</managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+</managed-bean>
+
+<!-- AssetController Bean -->
+<managed-bean>
+    <managed-bean-name>assetController</managed-bean-name>
+    <managed-bean-class>com.java.controller.AssetController</managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+
+    <!-- Injecting asset -->
+    <managed-property>
+        <property-name>asset</property-name>
+        <property-class>com.java.model.Asset</property-class>
+        <value>#{asset}</value>
+    </managed-property>
+
+    <!-- Injecting assetDao -->
+    <managed-property>
+        <property-name>assetdao</property-name>
+        <property-class>com.java.dao.AssetDao</property-class>
+        <value>#{assetDao}</value>
+    </managed-property>
+</managed-bean>
+
+
+
+
+
+
+
+
+
+
+	<!-- Model Bean -->
+	<managed-bean>
+		<managed-bean-name>user</managed-bean-name>
+		<managed-bean-class>com.java.model.User</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+
+	<!-- DAO Bean -->
+	<managed-bean>
+		<managed-bean-name>userDao</managed-bean-name>
+		<managed-bean-class> com.java.daoImpl.UserDaoImpl
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+
+	<!-- Controller Bean -->
+	<managed-bean>
+		<managed-bean-name>userController</managed-bean-name>
+		<managed-bean-class>com.java.controller.UserController
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+
+		<managed-property>
+			<property-name>user</property-name>
+			<property-class>com.java.model.User</property-class>
+			<value>#{user}</value>
+		</managed-property>
+
+		<managed-property>
+			<property-name>userDao</property-name>
+			<property-class> com.java.daoImpl.UserDaoImpl</property-class>
+			<value>#{userDao}</value>
+		</managed-property>
+	</managed-bean>
+
+
+
+
+
+	<!-- Managed Bean for Admin Model -->
+
+	<managed-bean>
+		<managed-bean-name>admin</managed-bean-name>
+		<managed-bean-class>com.java.model.Admin</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+
+	<!-- Managed Bean for Admin DAO Implementation -->
+	<managed-bean>
+		<managed-bean-name>adminDao</managed-bean-name>
+		<managed-bean-class>com.java.daoImpl.AdminDaoImpl</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+
+	<!-- Managed Bean for Admin Controller -->
+	<managed-bean>
+		<managed-bean-name>adminController</managed-bean-name>
+		<managed-bean-class>com.java.controller.AdminController
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+
+		<!-- Injecting the Admin model bean into the controller -->
+		<managed-property>
+			<property-name>admin</property-name>
+			<property-class>com.java.model.Admin</property-class>
+			<value>#{admin}</value>
+		</managed-property>
+
+		<!-- Injecting the DAO implementation into the controller -->
+		<managed-property>
+			<property-name>admindao</property-name>
+			<property-class>com.java.daoImpl.AdminDaoImpl</property-class>
+			<value>#{adminDao}</value>
+		</managed-property>
+	</managed-bean>
+
+
+
+
+</faces-config>

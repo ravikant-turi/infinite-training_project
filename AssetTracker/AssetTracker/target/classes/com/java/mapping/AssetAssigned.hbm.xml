@@ -1,0 +1,54 @@
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+
+
+	<class name="com.java.model.AssetAssigned" table="assetAssigned">
+		<id name="id" column="id" type="int">
+			<generator class="identity" />
+		</id>
+
+
+          <many-to-one name="user" class="com.java.model.User"
+			column="user_id" not-null="true" />
+
+		<many-to-one name="asset" class="com.java.model.Asset"
+			column="asset_id" not-null="true" /> 
+
+		
+		<property name="assignedDate" column="assignedDate" />
+	</class>
+</hibernate-mapping>
+
+
+
+<!-- 
+private User user;
+
+	private Asset asset;
+
+	private Date
+	assignedDate;
+	
+	<set name="asset" cascade="all" inverse="true">
+			<key column="asset_id" />
+			<one-to-many class="com.java.model.Asset" />
+		</set>
+
+
+		<set name="user" cascade="all" inverse="true">
+			<key column="user_id" />
+			<one-to-many class="com.java.model.User" />
+		</set>
+	
+
+ 	<many-to-one name="user" class="com.java.model.User"
+			column="user_id" not-null="true" />
+
+		<many-to-one name="asset" class="com.java.model.Asset"
+			column="asset_id" not-null="true" /> 
+			
+			-->

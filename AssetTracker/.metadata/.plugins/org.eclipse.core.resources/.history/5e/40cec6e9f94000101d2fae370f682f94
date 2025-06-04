@@ -1,0 +1,14 @@
+package com.java.test;
+
+import com.java.dao.AdminDao;
+import com.java.daoImpl.AdminDaoImpl;
+import com.java.model.Asset;
+import com.java.model.User;
+import com.java.util.HibernateUtil;
+import org.hibernate.Session;
+
+public class AssetAssignTest {
+
+    public static void main(String[] args) {
+    	 
+}

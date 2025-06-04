@@ -1,0 +1,183 @@
+package com.java.daoImpl;
+
+import java.io.Serializable;
+import java.util.Date;
+
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+
+import org.hibernate.Query;
+import org.hibernate.Transaction;
+import org.hibernate.classic.Session;
+
+import com.java.dao.AdminDao;
+import com.java.model.Admin;
+import com.java.model.Asset;
+import com.java.model.AssetAssigned;
+import com.java.model.AssetRequest;
+import com.java.model.RequestStatus;
+import com.java.model.Status;
+import com.java.model.User;
+import com.java.util.HibernateUtil;
+
+public class AdminDaoImpl implements AdminDao {
+
+	
+	@Override
+	public String signUp(Admin user) {
+		FacesContext context = FacesContext.getCurrentInstance();
+		boolean valid = true;
+
+		if (isEmpty(user.getName())) {
+			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Name is required", null));
+			valid = false;
+		}
+
+		if (isEmpty(user.getPasscode())) {
+			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Passcode is required", null));
+			valid = false;
+		}
+
+		if (isEmpty(user.getEmail())) {
+			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Email is required", null));
+			valid = false;
+		}
+
+		if (!valid) {
+			return null; // prevent save if any field is empty
+		}
+
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		Transaction tx = session.beginTransaction();
+		session.save(user);
+		tx.commit();
+		session.close();
+		System.out.println("signUp is called");
+
+		return "User Registered Successfully";
+	}
+
+	@Override
+	public String signIn(String name, String passcode) {
+		FacesContext context = FacesContext.getCurrentInstance();
+		boolean valid = true;
+
+		if (isEmpty(name)) {
+			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "adminname is required", null));
+			valid = false;
+		}
+
+		if (isEmpty(passcode)) {
+			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Password is required", null));
+			valid = false;
+		}
+
+		if (!valid) {
+			return null;
+		}
+
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		Query query = session.createQuery("from Admin where name = :name and passcode = :passcode");
+		query.setParameter("name", name);
+		query.setParameter("passcode", passcode);
+
+		Admin result = (Admin) query.uniqueResult();
+		session.close();
+
+		if (result != null) {
+			return "valid";
+		} else {
+			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid credentials", null));
+			return "invalid";
+		}
+	}
+
+	private boolean isEmpty(Object value) {
+		return value == null || value.toString().trim().isEmpty();
+	}
+
+	@Override
+	public String assignAssetToUser(int loginId,  int assetId) {
+		
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		
+		Transaction tx = session.beginTransaction();
+
+		// Check asset availability
+		Asset asset = (Asset) session.get(Asset.class, assetId);
+		
+		if (asset == null || asset.getQuantity() <= 0) {
+			session.close();
+			return "Asset not available for assignment.";
+		}
+		
+		User user = (User) session.get(User.class, loginId);
+
+		// Create new assignment
+		
+		user.setStatus(Status.ASSIGNED);
+		
+		AssetAssigned assigned = new AssetAssigned();
+
+		assigned.setAsset(asset);
+		
+		assigned.setAssignedDate(new Date());
+
+		session.save(assigned);
+		
+		
+
+		// Decrease asset quantity
+		asset.setQuantity(asset.getQuantity() - 1);
+		session.update(asset);
+		session.update(user);
+
+		tx.commit();
+		session.close();
+
+		return "Asset successfully assigned to user.";
+	}
+
+	@Override
+	public String approveAssetRequest(int requestId) {
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		Transaction tx = session.beginTransaction();
+
+		// Get the asset request
+		AssetRequest request = (AssetRequest) session.get(AssetRequest.class, requestId);
+		if (request == null || request.getRequestStatus() != RequestStatus.PENDING) {
+			session.close();
+			return "Invalid or already approved request.";
+		}
+
+		// Check asset stock
+		Asset asset = (Asset) session.get(Asset.class, (Serializable) request.getAssetRequestId());
+		if (asset == null || asset.getQuantity() <= 0) {
+			session.close();
+			return "Requested asset is out of stock.";
+		}
+
+		// Update request status
+		request.setRequestStatus(RequestStatus.APPROVED);
+		request.setAssignedDate(new Date());
+		session.update(request);
+
+		// Assign asset
+		AssetAssigned assigned = new AssetAssigned();
+		assigned.setUser(request.getRequestByUserId());
+		assigned.setAsset(request.getAssetRequestId());
+		assigned.setAssignedDate(new Date());
+		session.save(assigned);
+
+		// Update asset quantity
+		asset.setQuantity(asset.getQuantity() - 1);
+		session.update(asset);
+
+		tx.commit();
+		session.close();
+
+		return "Asset request approved and assigned.";
+	}
+
+
+}

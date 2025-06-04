@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+    <fullyQualifiedTypeName name="com.java.daoImpl.AdminDaoImpl"/>
+    <fullyQualifiedTypeName name="com.java.model.Asset"/>
+    <fullyQualifiedTypeName name="com.java.model.Status"/>
+    <fullyQualifiedTypeName name="java.util.Date"/>
+    <fullyQualifiedTypeName name="com.java.daoImpl.UserDaoImpl"/>
+    <fullyQualifiedTypeName name="com.java.model.AssetReturn"/>
+</qualifiedTypeNameHistroy>

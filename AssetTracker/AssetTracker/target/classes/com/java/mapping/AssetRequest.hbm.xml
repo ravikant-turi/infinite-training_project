@@ -1,0 +1,73 @@
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+
+<!-- private int requestId; // user Id private User requestByUser; // AssetId 
+	private Asset assetRequestId; private RequestStatus requestStatus; -->
+
+
+<hibernate-mapping>
+
+
+
+	<class name="com.java.model.AssetRequest" table="AssetRequest">
+		<id name="requestId" column="requestId" type="int">
+			<generator class="identity" />
+		</id>
+
+
+ 
+
+ <many-to-one name="requestByUserId" class="com.java.model.User"
+			column="requestByUserId" not-null="true" />
+
+		<many-to-one name="assetRequestId" class="com.java.model.Asset"
+			column="assetRequestId" not-null="true" /> 
+
+
+
+		
+
+		<property name="assignedDate" column="assignedDate" />
+
+
+		<property name="requestStatus">
+			<column name="requestStatus" />
+			<type name="org.hibernate.type.EnumType">
+				<param name="enumClass">com.java.model.RequestStatus</param>
+				<param name="type">12</param>
+			</type>
+		</property>
+	</class>
+</hibernate-mapping>
+
+
+<!-- 
+
+private int requestId;
+
+//	user Id
+
+	private User requestByUserId;
+
+//	AssetId
+
+	private Asset assetRequestId;
+
+	private RequestStatus requestStatus;
+
+	private Date assignedDate;
+
+<set name="assetRequestId" cascade="all" inverse="true">
+			<key column="assetRequestId" />
+			<one-to-many class="com.java.model.Asset" />
+		</set>
+
+
+		<set name="requestByUser" cascade="all" inverse="true">
+			<key column="requestByUser" />
+			<one-to-many class="com.java.model.User" />
+		</set>
+
+ -->

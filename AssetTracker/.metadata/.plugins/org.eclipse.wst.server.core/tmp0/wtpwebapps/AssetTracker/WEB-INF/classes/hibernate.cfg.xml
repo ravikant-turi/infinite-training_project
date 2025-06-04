@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+        <!-- Database connection settings -->
+        <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/assetInfinite</property>
+        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.connection.password">springstudent</property>
+
+        <!-- SQL dialect -->
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+
+        <!-- Schema update setting -->
+        <property name="hibernate.hbm2ddl.auto">update</property>
+
+        <!-- Logging (optional but useful for debugging) -->
+        <property name="hibernate.show_sql">true</property>
+        <property name="hibernate.format_sql">true</property>
+
+        <!-- Disable Bean Validation to avoid JAXB/ValidationException issues -->
+        <property name="hibernate.validator.apply_to_ddl">false</property>
+        <property name="hibernate.validator.autoregister_listeners">false</property>
+        <property name="javax.persistence.validation.mode">none</property>
+
+        <!-- XML Mapping files -->
+        <mapping resource="com/java/mapping/Asset.hbm.xml"/>
+        <mapping resource="com/java/mapping/User.hbm.xml"/>
+        <mapping resource="com/java/mapping/Admin.hbm.xml"/>
+        
+        <mapping resource="com/java/mapping/AssetAssigned.hbm.xml"/>
+        <mapping resource="com/java/mapping/AssetRequest.hbm.xml"/>
+        <mapping resource="com/java/mapping/AssetReturn.hbm.xml"/>
+        
+    </session-factory>
+</hibernate-configuration>

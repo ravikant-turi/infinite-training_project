@@ -1,0 +1,12 @@
+package com.java.test;
+
+import com.java.daoImpl.UserDaoImpl;
+
+public class AssetReturn {
+	
+	public static void main(String[] args) {
+		
+		UserDao userdao = new UserDaoImpl()
+	}
+
+}

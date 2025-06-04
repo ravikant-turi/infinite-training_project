@@ -1,0 +1,149 @@
+package com.java.daoImpl;
+
+import java.util.Date;
+
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+
+import org.hibernate.Query;
+import org.hibernate.Transaction;
+import org.hibernate.classic.Session;
+
+import com.java.dao.UserDao;
+import com.java.model.Asset;
+import com.java.model.AssetAssigned;
+import com.java.model.AssetReturn;
+import com.java.model.User;
+import com.java.util.HibernateUtil;
+
+public class  UserDaoImpl implements UserDao {
+
+	@Override
+	public String signUp(User user) {
+		FacesContext context = FacesContext.getCurrentInstance();
+		boolean valid = true;
+
+		if (isEmpty(user.getName())) {
+			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Name is required", null));
+			valid = false;
+		}
+
+		if (isEmpty(user.getPasscode())) {
+			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Passcode is required", null));
+			valid = false;
+		}
+
+		if (isEmpty(user.getEmail())) {
+			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Email is required", null));
+			valid = false;
+		}
+
+		if (!valid) {
+			return null; // prevent save if any field is empty
+		}
+
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		Transaction tx = session.beginTransaction();
+		session.save(user);
+		tx.commit();
+		session.close();
+		System.out.println("signUp is called");
+
+		return "User Registered Successfully";
+	}
+
+	@Override
+	public String signIn(String name, String passcode) {
+		FacesContext context = FacesContext.getCurrentInstance();
+		boolean valid = true;
+
+		if (isEmpty(name)) {
+			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Username is required", null));
+			valid = false;
+		}
+
+		if (isEmpty(passcode)) {
+			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Password is required", null));
+			valid = false;
+		}
+
+		if (!valid) {
+			return null;
+		}
+
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		Query query = session.createQuery("from User where name = :name and passcode = :passcode");
+		query.setParameter("name", name);
+		query.setParameter("passcode", passcode);
+
+		User result = (User) query.uniqueResult();
+		session.close();
+
+		if (result != null) {
+			return "valid";
+		} else {
+			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid credentials", null));
+			return "invalid";
+		}
+	}
+
+	private boolean isEmpty(Object value) {
+		return value == null || value.toString().trim().isEmpty();
+	}
+
+	@Override
+	public String returnAsset(int loginId, int assetId) {
+	    Session session = HibernateUtil.getSessionFactory().openSession();
+	    Transaction tx = null;
+
+	    try {
+	        tx = session.beginTransaction();
+
+	        // 1. Load User and Asset
+	        User user = new User();
+	        
+	        user.setLoginId(loginId);
+	        Asset asset = new Asset();
+	        asset.setId(assetId);
+	        
+
+	        // 2. Check if assignment exists
+	        Query assignedQuery = session.createQuery("from AssetAssigned where asset = :assetId and user = :userId");
+	        assignedQuery.setParameter("asset", asset);
+	        assignedQuery.setParameter("user", user);
+	        AssetAssigned assigned = (AssetAssigned) assignedQuery.uniqueResult();
+
+
+	        if (assigned == null) {
+	            return "This asset is not currently assigned to the user.";
+	        }
+
+
+	        // 4. Update asset quantity (+1)
+	        asset.setQuantity(asset.getQuantity() + 1);
+	        session.update(asset);
+
+	        // 5. Create AssetReturn record
+	        AssetReturn assetReturn = new AssetReturn();
+	        assetReturn.setRequestByUserid(user);
+	        assetReturn.setReturnAssetId(asset);
+	        assetReturn.setReturnDate(new Date());
+
+	        session.save(assetReturn);
+	        
+	        // 3. Delete the assignment
+	        session.delete(assigned);
+
+	        tx.commit();
+	        return "Asset returned successfully.";
+	    } catch (Exception e) {
+	        if (tx != null) tx.rollback();
+	        e.printStackTrace();
+	        return "Return failed due to error.";
+	    } finally {
+	        session.close();
+	    }
+	}
+
+
+}

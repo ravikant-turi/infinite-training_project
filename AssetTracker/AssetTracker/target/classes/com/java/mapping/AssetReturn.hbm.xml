@@ -1,0 +1,57 @@
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<!-- 
+
+private int assetReturnId;
+	
+//	user id
+	
+	private User returnbyuser;
+	
+//	asset ID
+	
+	private Asset returnAsset;
+	
+	private Date returnDate;
+
+ -->
+
+<hibernate-mapping>
+
+
+
+	<class name="com.java.model.AssetReturn" table="AssetReturn">
+		<id name="assetReturnId" column="assetReturnId" type="int">
+			<generator class="identity" />
+		</id>
+
+
+<many-to-one name="requestByUserid" class="com.java.model.User"
+			column="requestByUserid" not-null="true" />
+
+		<many-to-one name="returnAssetId" class="com.java.model.Asset"
+			column="returnAssetId" not-null="true" /> 
+
+
+
+
+
+		<property name="returnDate" column="returnDate"  />
+	</class>
+</hibernate-mapping>
+
+
+
+<!-- 
+		<set name="returnAssetId" cascade="all" inverse="true">
+			<key column="returnAssetId" />
+			<one-to-many class="com.java.model.Asset" />
+		</set>
+
+
+		<set name="returnbyuser" cascade="all" inverse="true">
+			<key column="returnbyuser" />
+			<one-to-many class="com.java.model.User" />
+		</set> -->

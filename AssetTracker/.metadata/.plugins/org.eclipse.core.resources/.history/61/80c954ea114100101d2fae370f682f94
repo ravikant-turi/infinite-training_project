@@ -1,0 +1,84 @@
+package com.java.controller;
+
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+
+import com.java.dao.AdminDao;
+import com.java.model.Admin;
+
+public class AdminController {
+
+	private Admin admin;
+	private AdminDao admindao;
+	
+	private int loginId;
+	private int assetId;
+	
+	public int getLoginId() {
+		return loginId;
+	}
+
+	public void setLoginId(int loginId) {
+		this.loginId = loginId;
+	}
+
+	public int getAssetId() {
+		return assetId;
+	}
+
+	public void setAssetId(int assetId) {
+		this.assetId = assetId;
+	}
+	
+	public Admin getAdmin() {
+		return admin;
+	}
+
+	public void setAdmin(Admin admin) {
+		this.admin = admin;
+	}
+
+	public AdminDao getAdmindao() {
+		return admindao;
+	}
+
+	public void setAdmindao(AdminDao admindao) {
+		this.admindao = admindao;
+	}
+
+	
+	
+	//Sign Up 
+	public String signUp() {
+		
+		String result = admindao.signUp(admin);
+
+		if (result == null) {
+			
+			return null;
+		}
+
+		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, result, null));
+
+		return "login"; 
+	}
+	
+	//Sign In 
+	public String signIn() {
+		String result = admindao.signIn(String.valueOf(admin.getName()), String.valueOf(admin.getPasscode()));
+
+		if ("valid".equals(result)) {
+			return "message"; 
+		} else if ("invalid".equals(result)) {
+			
+			return null;
+		}
+		return null;
+	}
+
+	
+	public String assignAsset() {
+		return admindao.assignAssetToUser(loginId, assetId);
+	}
+	
+}

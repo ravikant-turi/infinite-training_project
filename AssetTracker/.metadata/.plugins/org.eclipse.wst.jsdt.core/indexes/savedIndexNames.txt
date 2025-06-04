@@ -1,0 +1,9 @@
+INDEX VERSION 1.4+C:\Java_Training\AssetTrackerNew\.metadata\.plugins\org.eclipse.wst.jsdt.core\indexes
+3422785656.index
+443538206.index
+2371923506.index
+3086920604.index
+3086920604.index
+2953061924.index
+580307943.index
+1901899614.index

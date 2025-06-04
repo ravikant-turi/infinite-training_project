@@ -1,0 +1,86 @@
+<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
+<%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
+<center>
+<f:view>
+    <html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>Assign Asset to User</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background: #f9f9f9;
+                margin: 0;
+                padding: 40px;
+            }
+            .container {
+                background: white;
+                padding: 25px;
+                border-radius: 10px;
+                width: 400px;
+                margin: auto;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            }
+            h2 {
+                text-align: center;
+                color: #333;
+            }
+            .form-row {
+                margin-bottom: 15px;
+            }
+            label {
+                display: block;
+                font-weight: bold;
+                margin-bottom: 5px;
+            }
+            input {
+                width: 100%;
+                padding: 8px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+            }
+            .btn {
+                background-color: #4CAF50;
+                color: white;
+                padding: 10px 20px;
+                border: none;
+                border-radius: 5px;
+                width: 100%;
+                cursor: pointer;
+                font-size: 16px;
+            }
+            .btn:hover {
+                background-color: #45a049;
+            }
+            .message {
+                margin-top: 20px;
+                color: green;
+                font-weight: bold;
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h2>Assign Asset</h2>
+
+            <h:form>
+                <div class="form-row">
+                    <label for="loginId">User Login ID:</label>
+                    <h:inputText id="loginId" value="#{adminController.loginId}" />
+                </div>
+
+                <div class="form-row">
+                    <label for="assetId">Asset ID:</label>
+                    <h:inputText id="assetId" value="#{adminController.assetId}" />
+                </div>
+
+                <h:commandButton value="Assign Asset" action="#{adminController.assignAsset}" styleClass="btn" />
+
+                <h:messages styleClass="message" globalOnly="true" />
+            </h:form>
+        </div>
+    </body>
+    </html>
+</f:view>
+</center>

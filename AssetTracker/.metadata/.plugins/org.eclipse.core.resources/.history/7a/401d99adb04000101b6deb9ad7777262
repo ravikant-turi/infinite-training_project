@@ -1,0 +1,36 @@
+package com.java.test;
+
+import com.java.dao.AdminDao;
+import com.java.daoImpl.AdminDaoImpl;
+import com.java.model.Asset;
+import com.java.model.User;
+import com.java.util.HibernateUtil;
+import org.hibernate.Session;
+
+public class AssetAssignTest {
+
+    public static void main(String[] args) {
+        AdminDao adminDao = new AdminDaoImpl();
+
+        // Step 1: Fetch an existing User and Asset from DB
+        Session session = HibernateUtil.getSessionFactory().openSession();
+
+        int testUserId = 1; // replace with a valid user id from DB
+        int testAssetId = 1; // replace with a valid asset id from DB
+
+        User user = (User) session.get(User.class, testUserId);
+        Asset asset = (Asset) session.get(Asset.class, testAssetId);
+
+        session.close();
+
+        if (user == null || asset == null) {
+            System.out.println("User or Asset not found in the database.");
+            return;
+        }
+
+        // Step 2: Test the method
+        String result = adminDao.assignAssetToUser(user.getUserId(), asset.getAssetId());
+
+        System.out.println("Result: " + result);
+    }
+}

@@ -1,0 +1,12 @@
+package com.java.test;
+
+import com.java.daoImpl.AdminDaoImpl;
+
+public class AssetAssignTest {
+
+    public static void main(String[] args) {
+    
+    	AdminDao addao = new AdminDaoImpl();
+    }
+    
+}

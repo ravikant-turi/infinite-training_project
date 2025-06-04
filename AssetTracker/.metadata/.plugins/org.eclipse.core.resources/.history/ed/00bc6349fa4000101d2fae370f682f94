@@ -1,0 +1,19 @@
+package com.java.dao;
+
+import com.java.model.Admin;
+import com.java.model.Asset;
+import com.java.model.User;
+
+public interface AdminDao {
+
+	String signUp(Admin admin); // save new user
+
+	String signIn(String name, String passcode); // check login credentials
+
+//	String assignAssetToUser(int userId, int assetId);
+
+	String approveAssetRequest(int requestId);
+
+	String assignAssetToUser(User userId, Asset assetId);
+
+}

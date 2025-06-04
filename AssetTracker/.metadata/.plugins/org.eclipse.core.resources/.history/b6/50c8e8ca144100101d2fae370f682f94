@@ -1,0 +1,154 @@
+package com.java.daoImpl;
+
+import java.util.Date;
+
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+
+import org.hibernate.Query;
+import org.hibernate.Transaction;
+import org.hibernate.classic.Session;
+
+import com.java.dao.UserDao;
+import com.java.model.Asset;
+import com.java.model.AssetAssigned;
+import com.java.model.AssetRequest;
+import com.java.model.RequestStatus;
+import com.java.model.User;
+import com.java.util.HibernateUtil;
+
+public class  UserDaoImpl implements UserDao {
+
+	@Override
+	public String signUp(User user) {
+		FacesContext context = FacesContext.getCurrentInstance();
+		boolean valid = true;
+
+		if (isEmpty(user.getName())) {
+			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Name is required", null));
+			valid = false;
+		}
+
+		if (isEmpty(user.getPasscode())) {
+			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Passcode is required", null));
+			valid = false;
+		}
+
+		if (isEmpty(user.getEmail())) {
+			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Email is required", null));
+			valid = false;
+		}
+
+		if (!valid) {
+			return null; // prevent save if any field is empty
+		}
+
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		Transaction tx = session.beginTransaction();
+		session.save(user);
+		tx.commit();
+		session.close();
+		System.out.println("signUp is called");
+
+		return "User Registered Successfully";
+	}
+
+	@Override
+	public String signIn(String name, String passcode) {
+		FacesContext context = FacesContext.getCurrentInstance();
+		boolean valid = true;
+
+		if (isEmpty(name)) {
+			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Username is required", null));
+			valid = false;
+		}
+
+		if (isEmpty(passcode)) {
+			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Password is required", null));
+			valid = false;
+		}
+
+		if (!valid) {
+			return null;
+		}
+
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		Query query = session.createQuery("from User where name = :name and passcode = :passcode");
+		query.setParameter("name", name);
+		query.setParameter("passcode", passcode);
+
+		User result = (User) query.uniqueResult();
+		session.close();
+
+		if (result != null) {
+			return "valid";
+		} else {
+			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid credentials", null));
+			return "invalid";
+		}
+	}
+
+	private boolean isEmpty(Object value) {
+		return value == null || value.toString().trim().isEmpty();
+	}
+
+	@Override
+	public String returnAsset(int assetId, String loginId) {
+	    Session session = HibernateUtil.getSessionFactory().openSession();
+	    Transaction tx = null;
+	    String msg = "";
+
+	    try {
+	        tx = session.beginTransaction();
+
+	        // Step 1: Get user and asset
+	        User user = (User) session.get(User.class, loginId);
+	        Asset asset = (Asset) session.get(Asset.class, assetId);
+
+	        if (user == null || asset == null) {
+	            return "Invalid asset or user!";
+	        }
+
+	        // Step 2: Find the assigned asset
+	        Query q = session.createQuery("FROM AssetAssigned WHERE asset.id = :assetId AND user.loginId = :loginId");
+	        q.setParameter("assetId", assetId);
+	        q.setParameter("loginId", loginId);
+	        AssetAssigned assigned = (AssetAssigned) q.uniqueResult();
+
+	        if (assigned == null) {
+	            return "No such asset assigned to this user.";
+	        }
+
+	        // Step 3: Save return as an AssetRequest
+	        AssetRequest returnReq = new AssetRequest();
+	        returnReq.setAssetRequestId(asset);
+	        returnReq.setRequestByUserId(user);
+	        returnReq.setRequestStatus(RequestStatus.APPROVED);
+	        returnReq.setAssignedDate(new Date());
+
+	        session.save(returnReq);
+
+	        // Step 4: Delete the assignment
+	        session.delete(assigned);
+
+	        // Step 5: Update quantity in Asset table
+	        asset.setQuantity(asset.getQuantity() + 1);
+	        session.update(asset);
+
+	        tx.commit();
+	        msg = "Asset returned and recorded successfully.";
+	    } catch (Exception e) {
+	        if (tx != null) tx.rollback();
+	        e.printStackTrace();
+	        msg = "Return failed due to server error.";
+	    } finally {
+	        session.close();
+	    }
+
+	    return msg;
+	}
+
+
+
+
+}

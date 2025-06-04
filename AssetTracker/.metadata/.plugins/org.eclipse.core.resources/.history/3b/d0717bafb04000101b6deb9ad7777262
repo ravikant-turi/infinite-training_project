@@ -1,0 +1,35 @@
+package com.java.test;
+
+import com.java.dao.AdminDao;
+import com.java.daoImpl.AdminDaoImpl;
+import com.java.model.Asset;
+import com.java.model.User;
+import com.java.util.HibernateUtil;
+import org.hibernate.Session;
+
+public class AssetAssignTest {
+
+    public static void main(String[] args) {
+    	 session = HibernateUtil.getSessionFactory().openSession();
+         tx = session.beginTransaction();
+
+         // 1. Fetch Asset (example: id = 1)
+         Asset asset = (Asset) session.get(Asset.class, 1);
+
+         if (asset != null && asset.getQuantity() > 0) {
+
+             // 2. Decrease asset quantity by 1
+             asset.setQuantity(asset.getQuantity() - 1);
+             session.update(asset);  // Very important: update back to DB
+
+             // 3. Create and save Employ
+             Employ employ = new Employ();
+             employ.setUsername("amit.sharma");
+             employ.setEmail("amit.sharma@example.com");
+             employ.setAsset(asset);  // assign the asset to this employ
+
+             session.save(employ);
+
+             tx.commit();
+             System.out.println("Asset assigned and Employ saved successfully!");
+}
